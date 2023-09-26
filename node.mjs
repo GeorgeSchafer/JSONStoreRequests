@@ -26,20 +26,13 @@ export async function getDB(pathStr='') {
     return await fetch(URL + `/${pathStr}`, get)
         .then(res => res.json())
         .then(res => res.data)
-        .catch(err => return err)
 }
 
 export async function postDB(pathStr='', bodyObj={"key":"value"}){
     let result;
     post.body = bodyObj;
 
-    result = await fetch(URL + `/${pathStr}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: bodyObj
-    })
+    result = await fetch(URL + `/${pathStr}`, post)
         .then(res => res.json())
         .catch(err => {
             console.log('error:', err)
@@ -57,7 +50,6 @@ export async function pushDB(pathStr='', bodyObj={}){
 
 export async function removeDB(pathStr=''){
     await fetch(URL + `/${pathStr}`, remove)
-        .catch(err => return err)
 
     return true;
 }
