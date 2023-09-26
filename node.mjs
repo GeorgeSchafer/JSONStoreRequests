@@ -25,41 +25,45 @@ const remove = {
 export async function getDB(pathStr='') {
     return await fetch(URL + `/${pathStr}`, get)
         .then(res => res.json())
-        .then(res => res.data)    
+        .then(res => res.data)
+        .catch(err => return err)
 }
 
-export async function postDB(pathStr='', bodyObj){
+export async function postDB(pathStr='', bodyObj={"key":"value"}){
+    let result;
     post.body = bodyObj;
-    console.log('body =', post.body)
 
-    const result = await fetch(URL + `/${pathStr}`, post)
+    result = await fetch(URL + `/${pathStr}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: bodyObj
+    })
         .then(res => res.json())
         .catch(err => {
             console.log('error:', err)
             return false;
         }
     )
-
-    console.log('result =', result)
+    console.log('expected =', bodyObj)
     post.body = null;
     return true;
 }
 
-export async function pushDB(pathStr='', bodyObj){
+export async function pushDB(pathStr='', bodyObj={}){
     return await postDB(pathStr, bodyObj)
 }
 
 export async function removeDB(pathStr=''){
     await fetch(URL + `/${pathStr}`, remove)
+        .catch(err => return err)
 
-    return true
+    return true;
 }
 
 /** 
-GET	Gets the db. Returns { "ok": true, "data": <data> } - Takes no body
 POST	Sets the db to the body of the request. The request must have the header Content-Type set to application/json.
-DELETE	Deletes a key from the db. If you do not specify a path (e.g. <token>/key), the whole database will be emptied!
-PUT	An alias of the POST request.
 */
 
 
