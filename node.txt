@@ -1,0 +1,29 @@
+"use strict";
+import { config } from 'dotenv';
+config({ path: './secrets.env' })
+
+
+
+const URL = process.env.URL;
+
+const post = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: null
+}
+
+export async function postDB(pathStr='', bodyObj){
+    post.body = bodyObj;
+    console.log('body =', post.body)
+    await fetch(URL + `/${pathStr}`, post).catch(err => {
+        console.log('error:', err)
+        return false;
+    });
+    post.body = null;
+    return true;
+}
+
+
+
